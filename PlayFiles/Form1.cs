@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,49 +18,61 @@ namespace PlayFiles
         string song;
         WaveOut output;
         Mp3FileReader reader;
+        string songsDirectory = "C:\\Users\\hakuchan\\Desktop\\Music for Visualizer";
+        DirectoryInfo searchDirectory;
         public Form1()
         {
             InitializeComponent();
-
 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            urlText.Text = "Enter url";
-            urlText.GotFocus += RemoveText;
-            urlText.LostFocus += AddText;
+            filenameText.Text = "Enter file";
+            filenameText.GotFocus += RemoveText;
+            filenameText.LostFocus += AddText;
             startButton.Click += PlaySong;
             pauseButton.Click += PauseSong;
+            searchDirectory = new DirectoryInfo(songsDirectory);
+
 
         }
 
         public void RemoveText(object sender, EventArgs e)
         {
-            if (urlText.Text == "Enter url")
+            if (filenameText.Text == "Enter file")
             {
-                urlText.Text = "";
+                filenameText.Text = "";
             }
         }
 
         public void AddText(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(urlText.Text))
-                urlText.Text = "Enter text here...";
+            if (string.IsNullOrWhiteSpace(filenameText.Text))
+                filenameText.Text = "Enter text here...";
         }
 
         public void PlaySong(object sender, EventArgs e)
         {
-            if (song == urlText.Text)
+
+            song = filenameText.Text;
+            string songPath;
+            FileInfo[] filesInDir = searchDirectory.GetFiles("*" + song + "*.*");
+            if(filesInDir.Length > 0)
             {
-                return;
+                songPath = filesInDir[0].FullName;
+                output = new WaveOut();
+                reader = new Mp3FileReader(songPath);
+                output.Init(reader);
+                output.Play();
+                pauseButton.Text = "Pause";
+                fileLabel.Text = "Currently playing " + songPath;
             }
-            song = urlText.Text;
-            output = new WaveOut();
-            reader = new Mp3FileReader(song);
-            output.Init(reader);
-            output.Play();
-            pauseButton.Text = "Pause";
+            else
+            {
+                fileLabel.Text = "This is not a valid song. Try Again.";
+            }
+            
         }
         public void PauseSong(object sender, EventArgs e)
         {
@@ -78,6 +91,8 @@ namespace PlayFiles
                 pauseButton.Text = "Start";
             }
         }
+
+
     }
 
 }

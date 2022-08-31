@@ -28,22 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.urlText = new System.Windows.Forms.TextBox();
+            this.filenameText = new System.Windows.Forms.TextBox();
             this.startButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
+            this.fileLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // urlText
+            // filenameText
             // 
-            this.urlText.Location = new System.Drawing.Point(342, 96);
-            this.urlText.Name = "urlText";
-            this.urlText.Size = new System.Drawing.Size(100, 22);
-            this.urlText.TabIndex = 1;
-            this.urlText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.filenameText.Location = new System.Drawing.Point(342, 96);
+            this.filenameText.Name = "filenameText";
+            this.filenameText.Size = new System.Drawing.Size(100, 22);
+            this.filenameText.TabIndex = 1;
+            this.filenameText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(356, 145);
+            this.startButton.Location = new System.Drawing.Point(356, 156);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 2;
@@ -59,14 +60,24 @@
             this.pauseButton.Text = "Pause";
             this.pauseButton.UseVisualStyleBackColor = true;
             // 
+            // fileLabel
+            // 
+            this.fileLabel.AutoSize = true;
+            this.fileLabel.Location = new System.Drawing.Point(370, 126);
+            this.fileLabel.Name = "fileLabel";
+            this.fileLabel.Size = new System.Drawing.Size(44, 16);
+            this.fileLabel.TabIndex = 4;
+            this.fileLabel.Text = "Name";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.fileLabel);
             this.Controls.Add(this.pauseButton);
             this.Controls.Add(this.startButton);
-            this.Controls.Add(this.urlText);
+            this.Controls.Add(this.filenameText);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -76,9 +87,10 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox urlText;
+        private System.Windows.Forms.TextBox filenameText;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button pauseButton;
+        private System.Windows.Forms.Label fileLabel;
     }
 }
 
