@@ -92,7 +92,45 @@ namespace PlayFiles
             }
         }
 
+        private void fileLabel_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void pauseButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void filenameText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fileLabel_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pauseButton_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void filenameText_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }
