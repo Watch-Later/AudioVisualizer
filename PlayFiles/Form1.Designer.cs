@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.startButton = new System.Windows.Forms.Button();
             this.pauseButton = new System.Windows.Forms.Button();
             this.fileLabel = new System.Windows.Forms.Label();
             this.filenameText = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.formsPlot1 = new ScottPlot.FormsPlot();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +51,7 @@
             this.startButton.TabIndex = 2;
             this.startButton.Text = "Play";
             this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            this.startButton.Click += new System.EventHandler(this.PlaySong);
             // 
             // pauseButton
             // 
@@ -58,7 +62,7 @@
             this.pauseButton.TabIndex = 7;
             this.pauseButton.Text = "Pause";
             this.pauseButton.UseVisualStyleBackColor = true;
-            this.pauseButton.Click += new System.EventHandler(this.pauseButton_Click_1);
+            this.pauseButton.Click += new System.EventHandler(this.PauseSong);
             // 
             // fileLabel
             // 
@@ -70,7 +74,6 @@
             this.fileLabel.TabIndex = 8;
             this.fileLabel.Text = "Name";
             this.fileLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.fileLabel.Click += new System.EventHandler(this.fileLabel_Click_1);
             // 
             // filenameText
             // 
@@ -81,7 +84,6 @@
             this.filenameText.Size = new System.Drawing.Size(91, 22);
             this.filenameText.TabIndex = 7;
             this.filenameText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.filenameText.TextChanged += new System.EventHandler(this.filenameText_TextChanged_1);
             // 
             // splitContainer1
             // 
@@ -91,7 +93,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel1_Paint);
+            this.splitContainer1.Panel1.Controls.Add(this.formsPlot1);
             // 
             // splitContainer1.Panel2
             // 
@@ -103,6 +105,19 @@
             this.splitContainer1.SplitterDistance = 478;
             this.splitContainer1.TabIndex = 10;
             // 
+            // formsPlot1
+            // 
+            this.formsPlot1.Location = new System.Drawing.Point(0, 0);
+            this.formsPlot1.Margin = new System.Windows.Forms.Padding(5, 3, 5, 3);
+            this.formsPlot1.Name = "formsPlot1";
+            this.formsPlot1.Size = new System.Drawing.Size(1234, 475);
+            this.formsPlot1.TabIndex = 0;
+            // 
+            // timer
+            // 
+            this.timer.Interval = 20;
+            this.timer.Tick += new System.EventHandler(this.TimerTick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -112,6 +127,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -126,6 +142,8 @@
         private System.Windows.Forms.Button pauseButton;
         private System.Windows.Forms.Label fileLabel;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private ScottPlot.FormsPlot formsPlot1;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
