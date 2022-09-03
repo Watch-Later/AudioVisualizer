@@ -51,7 +51,6 @@
             this.startButton.TabIndex = 2;
             this.startButton.Text = "Play";
             this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.PlaySong);
             // 
             // pauseButton
             // 
@@ -62,7 +61,6 @@
             this.pauseButton.TabIndex = 7;
             this.pauseButton.Text = "Pause";
             this.pauseButton.UseVisualStyleBackColor = true;
-            this.pauseButton.Click += new System.EventHandler(this.PauseSong);
             // 
             // fileLabel
             // 
@@ -116,7 +114,6 @@
             // timer
             // 
             this.timer.Interval = 20;
-            this.timer.Tick += new System.EventHandler(this.TimerTick);
             // 
             // Form1
             // 

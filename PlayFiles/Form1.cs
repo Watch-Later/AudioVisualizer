@@ -40,7 +40,6 @@ namespace PlayFiles
             InitializeComponent();
             AudioValues = new double[SampleRate * BufferMilliseconds / 1000];
 
-            // 
             buffer = new byte[(SampleRate * BufferMilliseconds / 1000)];
 
             formsPlot1.Plot.AddSignal(AudioValues, SampleRate / 1000);
@@ -56,8 +55,9 @@ namespace PlayFiles
             filenameText.LostFocus += AddText;
             startButton.Click += PlaySong;
             pauseButton.Click += PauseSong;
+            timer.Tick += TimerTick;
             searchDirectory = new DirectoryInfo(songsDirectory);
-
+            output = new WaveOut();
 
         }
 
@@ -78,13 +78,17 @@ namespace PlayFiles
         public void PlaySong(object sender, EventArgs e)
         {
             int bytesRead;
+            if (song == filenameText.Text)
+            {
+                output.Resume();
+                return;
+            }
             song = filenameText.Text;
             string songPath;
             FileInfo[] filesInDir = searchDirectory.GetFiles("*" + song + "*.*");
             if (filesInDir.Length > 0)
             {
                 songPath = filesInDir[0].FullName;
-                output = new WaveOut();
                 reader = new Mp3FileReader(songPath);
 
 
@@ -108,20 +112,17 @@ namespace PlayFiles
         }
         public void PauseSong(object sender, EventArgs e)
         {
-            if (output == null)
-            {
-                return;
-            }
             if (output.PlaybackState == PlaybackState.Playing)
             {
                 output.Pause();
                 pauseButton.Text = "Resume";
             }
-            else
+            else if (output.PlaybackState == PlaybackState.Paused)
             {
                 output.Play();
-                pauseButton.Text = "Start";
+                pauseButton.Text = "Pause";
             }
+
         }
 
         // request a redraw when the timer ticks as well as resize the axis. 
