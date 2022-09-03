@@ -40,17 +40,18 @@ namespace PlayFiles
             InitializeComponent();
             AudioValues = new double[SampleRate * BufferMilliseconds / 1000];
 
-            buffer = new byte[(SampleRate * BufferMilliseconds / 1000)];
+            buffer = new byte[2 * (SampleRate * BufferMilliseconds / 1000)];
 
             formsPlot1.Plot.AddSignal(AudioValues, SampleRate / 1000);
             formsPlot1.Plot.YLabel("Level");
-            formsPlot1.Plot.XLabel("Time (milliseconds)");
+            formsPlot1.Plot.XLabel("Time (ms)");
             formsPlot1.Refresh();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             filenameText.Text = "Enter file";
+            label1.Text = AudioValues[0].ToString("0.000000");
             filenameText.GotFocus += RemoveText;
             filenameText.LostFocus += AddText;
             startButton.Click += PlaySong;
@@ -90,19 +91,21 @@ namespace PlayFiles
             {
                 songPath = filesInDir[0].FullName;
                 reader = new Mp3FileReader(songPath);
-
-
                 output.Init(reader);
                 output.Play();
                 pauseButton.Text = "Pause";
                 fileLabel.Text = "Currently playing " + songPath;
-                //do
-                //{
-                //    bytesRead = reader.Read(buffer, 0, buffer.Length);
-                //    for (int i = 0; i < buffer.Length / 2; i++)
-                //        AudioValues[i] = BitConverter.ToInt16(buffer, i);
-                //} while (bytesRead > 0);
-
+                TextWriter txt = new StreamWriter("C:\\Users\\hakuchan\\source\\repos\\PlayFiles\\Output.txt");
+                if (output.PlaybackState == PlaybackState.Playing)
+                {
+                    bytesRead = reader.Read(buffer, 0, buffer.Length);
+                    for (int i = 0; i < buffer.Length / 2; i++)
+                    {
+                        AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
+                        txt.Write(AudioValues[i].ToString("0.000000") + " ");
+                    }
+                }
+                txt.Close();
             }
             else
             {
@@ -129,8 +132,6 @@ namespace PlayFiles
         // also convert the data from the buffer to a double 
         public void TimerTick(object sender, EventArgs e)
         {
-            for (int i = 0; i < buffer.Length / 2; i++)
-                AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
             int level = (int)AudioValues.Max();
             var currentLimits = formsPlot1.Plot.GetAxisLimits();
             formsPlot1.Plot.SetAxisLimits(
