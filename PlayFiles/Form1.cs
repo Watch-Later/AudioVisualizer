@@ -18,6 +18,7 @@ namespace PlayFiles
         string song;
         WaveOut output;
         Mp3FileReader reader;
+        Mp3FileReader readerVisualizer;
 
         // songsDirectory is the directory all music files are expected to be in
         string songsDirectory = "C:\\Users\\hakuchan\\Desktop\\Music for Visualizer";
@@ -35,6 +36,8 @@ namespace PlayFiles
         int ByteDepth = 2;
         // this is in ms, so in reality 20E-3 s
         int BufferMilliseconds = 20;
+
+        int bytesRead;
         public Form1()
         {
             InitializeComponent();
@@ -55,7 +58,6 @@ namespace PlayFiles
             filenameText.LostFocus += AddText;
             startButton.Click += PlaySong;
             pauseButton.Click += PauseSong;
-            timer.Tick += TimerTick;
             searchDirectory = new DirectoryInfo(songsDirectory);
             output = new WaveOut();
 
@@ -77,7 +79,7 @@ namespace PlayFiles
 
         public void PlaySong(object sender, EventArgs e)
         {
-            int bytesRead;
+            timer.Tick += TimerTick;
             if (song == filenameText.Text)
             {
                 output.Resume();
@@ -90,22 +92,12 @@ namespace PlayFiles
             {
                 songPath = filesInDir[0].FullName;
                 reader = new Mp3FileReader(songPath);
+                readerVisualizer = new Mp3FileReader(songPath);
+
                 output.Init(reader);
                 output.Play();
                 pauseButton.Text = "Pause";
                 fileLabel.Text = "Currently playing " + songPath;
-                //TextWriter txt = new StreamWriter("C:\\Users\\hakuchan\\source\\repos\\PlayFiles\\Output.txt");
-                for (int j = 0; j < 3000; j++)
-                {
-                    bytesRead = reader.Read(buffer, 0, buffer.Length);
-                    for (int i = 0; i < buffer.Length / 2; i++)
-                    {
-                        AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
-                        //txt.Write(AudioValues[i].ToString("0") + " ");
-                    }
-                    //txt.Write("BREAK");
-                }
-                //txt.Close();
             }
             else
             {
@@ -132,11 +124,21 @@ namespace PlayFiles
         // also convert the data from the buffer to a double 
         public void TimerTick(object sender, EventArgs e)
         {
+
             int level = (int)AudioValues.Max();
             var currentLimits = formsPlot1.Plot.GetAxisLimits();
             formsPlot1.Plot.SetAxisLimits(
                 yMin: Math.Min(currentLimits.YMin, -level),
                 yMax: Math.Max(currentLimits.YMax, level));
+
+            if (output != null && output.PlaybackState == PlaybackState.Playing)
+            {
+                bytesRead = readerVisualizer.Read(buffer, 0, buffer.Length);
+                for (int i = 0; i < buffer.Length / 2; i++)
+                {
+                    AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
+                }
+            }
             formsPlot1.RefreshRequest();
         }
     }
