@@ -51,7 +51,6 @@ namespace PlayFiles
         private void Form1_Load(object sender, EventArgs e)
         {
             filenameText.Text = "Enter file";
-            label1.Text = AudioValues[0].ToString("0.000000");
             filenameText.GotFocus += RemoveText;
             filenameText.LostFocus += AddText;
             startButton.Click += PlaySong;
@@ -95,17 +94,18 @@ namespace PlayFiles
                 output.Play();
                 pauseButton.Text = "Pause";
                 fileLabel.Text = "Currently playing " + songPath;
-                TextWriter txt = new StreamWriter("C:\\Users\\hakuchan\\source\\repos\\PlayFiles\\Output.txt");
-                if (output.PlaybackState == PlaybackState.Playing)
+                //TextWriter txt = new StreamWriter("C:\\Users\\hakuchan\\source\\repos\\PlayFiles\\Output.txt");
+                for (int j = 0; j < 3000; j++)
                 {
                     bytesRead = reader.Read(buffer, 0, buffer.Length);
                     for (int i = 0; i < buffer.Length / 2; i++)
                     {
                         AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
-                        txt.Write(AudioValues[i].ToString("0.000000") + " ");
+                        //txt.Write(AudioValues[i].ToString("0") + " ");
                     }
+                    //txt.Write("BREAK");
                 }
-                txt.Close();
+                //txt.Close();
             }
             else
             {
