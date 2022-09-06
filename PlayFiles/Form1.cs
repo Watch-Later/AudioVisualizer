@@ -17,8 +17,11 @@ namespace PlayFiles
     {
         string song;
         WaveOut output;
-        Mp3FileReader reader;
-        Mp3FileReader readerVisualizer;
+
+        WaveFileReader reader;
+        WaveFileReader readerVisualizer;
+        //Mp3FileReader reader;
+        //Mp3FileReader readerVisualizer;
 
         // songsDirectory is the directory all music files are expected to be in
         string songsDirectory = "C:\\Users\\hakuchan\\Desktop\\Music for Visualizer";
@@ -26,6 +29,7 @@ namespace PlayFiles
 
         // You need double values for graphing on the plot
         readonly double[] AudioValues;
+        readonly double[] FFTValues;
 
         // mp3FileReader uses a byte buffer
         byte[] buffer;
@@ -42,12 +46,16 @@ namespace PlayFiles
         {
             InitializeComponent();
             AudioValues = new double[SampleRate * BufferMilliseconds / 1000];
+            double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
+            double[] fftTransform = FftSharp.Transform.FFTmagnitude(paddedAudio);
+            FFTValues = new double[fftTransform.Length];
+            double fftPeriod = FftSharp.Transform.FFTfreqPeriod(SampleRate, fftTransform.Length);
 
             buffer = new byte[2 * (SampleRate * BufferMilliseconds / 1000)];
 
-            formsPlot1.Plot.AddSignal(AudioValues, SampleRate / 1000);
+            formsPlot1.Plot.AddSignal(FFTValues, fftPeriod);
             formsPlot1.Plot.YLabel("Level");
-            formsPlot1.Plot.XLabel("Time (ms)");
+            formsPlot1.Plot.XLabel("Frequency (Hz)");
             formsPlot1.Refresh();
         }
 
@@ -79,7 +87,7 @@ namespace PlayFiles
 
         public void PlaySong(object sender, EventArgs e)
         {
-            timer.Tick += TimerTick;
+
             if (song == filenameText.Text)
             {
                 output.Resume();
@@ -87,15 +95,18 @@ namespace PlayFiles
             }
             song = filenameText.Text;
             string songPath;
-            FileInfo[] filesInDir = searchDirectory.GetFiles("*" + song + "*.*");
+            FileInfo[] filesInDir = searchDirectory.GetFiles("*" + song + "*.wav");
             if (filesInDir.Length > 0)
             {
                 songPath = filesInDir[0].FullName;
-                reader = new Mp3FileReader(songPath);
-                readerVisualizer = new Mp3FileReader(songPath);
+                //reader = new Mp3FileReader(songPath);
+                //readerVisualizer = new Mp3FileReader(songPath);
+                reader = new WaveFileReader(songPath);
+                readerVisualizer = new WaveFileReader(songPath);
 
                 output.Init(reader);
                 output.Play();
+                timer.Tick += TimerTick;
                 pauseButton.Text = "Pause";
                 fileLabel.Text = "Currently playing " + songPath;
             }
@@ -125,12 +136,6 @@ namespace PlayFiles
         public void TimerTick(object sender, EventArgs e)
         {
 
-            int level = (int)AudioValues.Max();
-            var currentLimits = formsPlot1.Plot.GetAxisLimits();
-            formsPlot1.Plot.SetAxisLimits(
-                yMin: Math.Min(currentLimits.YMin, -level),
-                yMax: Math.Max(currentLimits.YMax, level));
-
             if (output != null && output.PlaybackState == PlaybackState.Playing)
             {
                 bytesRead = readerVisualizer.Read(buffer, 0, buffer.Length);
@@ -139,6 +144,22 @@ namespace PlayFiles
                     AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
                 }
             }
+            
+
+            double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
+            var window = new FftSharp.Windows.Hanning();
+            window.ApplyInPlace(paddedAudio);
+            double[] fftTransform = FftSharp.Transform.FFTpower(paddedAudio);
+
+            double max = fftTransform.Max();
+            var currentLimits = formsPlot1.Plot.GetAxisLimits();
+            formsPlot1.Plot.SetAxisLimits(
+                xMin: 0,
+                xMax: 6,
+                yMin: 0,
+                yMax: Math.Max(currentLimits.YMax, max));
+
+            Array.Copy(fftTransform, FFTValues, fftTransform.Length);
             formsPlot1.RefreshRequest();
         }
     }
