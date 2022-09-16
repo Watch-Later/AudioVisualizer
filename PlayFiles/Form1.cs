@@ -42,6 +42,8 @@ namespace PlayFiles
         int BufferMilliseconds = 20;
 
         int bytesRead;
+
+        double SmoothingValue = 0.1;
         public Form1()
         {
             InitializeComponent();
@@ -67,6 +69,8 @@ namespace PlayFiles
             startButton.Click += PlaySong;
             pauseButton.Click += PauseSong;
             searchDirectory = new DirectoryInfo(songsDirectory);
+            smoothingControl.Scroll += smoothing_Scroll;
+            smoothingLabel.KeyUp += changeSmoothing;
             output = new WaveOut();
 
         }
@@ -141,10 +145,11 @@ namespace PlayFiles
                 bytesRead = readerVisualizer.Read(buffer, 0, buffer.Length);
                 for (int i = 0; i < buffer.Length / 2; i++)
                 {
-                    AudioValues[i] = BitConverter.ToInt16(buffer, i * 2);
+                    // single pole low pass filter (smoothing instantaneous values)
+                    AudioValues[i] = AudioValues[i] * SmoothingValue + BitConverter.ToInt16(buffer, i * 2) * (1 - SmoothingValue);
                 }
             }
-            
+
 
             double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioValues);
             var window = new FftSharp.Windows.Hanning();
@@ -161,6 +166,30 @@ namespace PlayFiles
 
             Array.Copy(fftTransform, FFTValues, fftTransform.Length);
             formsPlot1.RefreshRequest();
+        }
+
+        private void smoothing_Scroll(object sender, EventArgs e)
+        {
+            double val = (double)(smoothingControl.Value) / 20;
+            smoothingLabel.Text = $"{val:0.##}";
+            SmoothingValue = val;
+        }
+
+        private void changeSmoothing(object sender, KeyEventArgs e)
+        {
+
+            double val;
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (Double.TryParse(smoothingLabel.Text, out val))
+                {
+                    SmoothingValue = val;
+                }
+                else
+                {
+                    smoothingLabel.Text = "This is not a valid value. Try again.";
+                }
+            }
         }
     }
 
