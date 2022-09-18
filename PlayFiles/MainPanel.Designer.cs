@@ -1,6 +1,6 @@
 ﻿namespace PlayFiles
 {
-    partial class Form1
+    partial class MainPanel
     {
         /// <summary>
         /// Required designer variable.
@@ -48,6 +48,7 @@
             // startButton
             // 
             this.startButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.startButton.AutoSize = true;
             this.startButton.Location = new System.Drawing.Point(173, 13);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 33);
@@ -58,9 +59,10 @@
             // pauseButton
             // 
             this.pauseButton.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pauseButton.AutoSize = true;
             this.pauseButton.Location = new System.Drawing.Point(279, 19);
             this.pauseButton.Name = "pauseButton";
-            this.pauseButton.Size = new System.Drawing.Size(75, 23);
+            this.pauseButton.Size = new System.Drawing.Size(75, 26);
             this.pauseButton.TabIndex = 7;
             this.pauseButton.Text = "Pause";
             this.pauseButton.UseVisualStyleBackColor = true;
@@ -134,7 +136,7 @@
             this.smoothingLabel.Size = new System.Drawing.Size(100, 22);
             this.smoothingLabel.TabIndex = 11;
             // 
-            // Form1
+            // MainPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -142,7 +144,7 @@
             this.Controls.Add(this.smoothingLabel);
             this.Controls.Add(this.fileLabel);
             this.Controls.Add(this.splitContainer1);
-            this.Name = "Form1";
+            this.Name = "MainPanel";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);

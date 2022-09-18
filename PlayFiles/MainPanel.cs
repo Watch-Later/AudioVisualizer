@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace PlayFiles
 {
-    public partial class Form1 : Form
+    public partial class MainPanel : Form
     {
         string song;
         WaveOut output;
@@ -24,7 +24,7 @@ namespace PlayFiles
         //Mp3FileReader readerVisualizer;
 
         // songsDirectory is the directory all music files are expected to be in
-        string songsDirectory = "C:\\Users\\hakuchan\\Desktop\\Music for Visualizer";
+        string songsDirectory = Properties.Settings.Default.songsDirectory;
         DirectoryInfo searchDirectory;
 
         // You need double values for graphing on the plot
@@ -44,7 +44,7 @@ namespace PlayFiles
         int bytesRead;
 
         double SmoothingValue = 0.1;
-        public Form1()
+        public MainPanel()
         {
             InitializeComponent();
             AudioValues = new double[SampleRate * BufferMilliseconds / 1000];
