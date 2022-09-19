@@ -24,7 +24,8 @@ namespace PlayFiles
         //Mp3FileReader readerVisualizer;
 
         // songsDirectory is the directory all music files are expected to be in
-        string songsDirectory = Properties.Settings.Default.songsDirectory;
+        //string songsDirectory = Properties.Settings.Default.songsDirectory;
+        string songsDirectory = "C:\\Users\\hakuchan\\Desktop\\Music for Visualizer";
         DirectoryInfo searchDirectory;
 
         // You need double values for graphing on the plot

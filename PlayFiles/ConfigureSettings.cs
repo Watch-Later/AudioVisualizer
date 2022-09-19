@@ -15,11 +15,16 @@ namespace PlayFiles
         public ConfigureSettings()
         {
             InitializeComponent();
+            exitSettingsButton.Click += exitSettingsButton_Click;
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private void ConfigButton_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void exitSettingsButton_Click(object sender, EventArgs e)
+        {
         }
     }
 }

@@ -60,7 +60,7 @@
             // 
             this.pauseButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pauseButton.AutoSize = true;
-            this.pauseButton.Location = new System.Drawing.Point(279, 19);
+            this.pauseButton.Location = new System.Drawing.Point(276, 16);
             this.pauseButton.Name = "pauseButton";
             this.pauseButton.Size = new System.Drawing.Size(75, 26);
             this.pauseButton.TabIndex = 7;
